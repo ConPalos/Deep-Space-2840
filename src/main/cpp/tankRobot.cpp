@@ -103,7 +103,7 @@ void Robot::TeleopPeriodic() {
     box.Set(0.0); //if neither are pressed, nothing happens? I'm unclear on this one.
   }
 
-  if (armTop()) {
+  if (armAlign()) { //if somebody presses the armAlign button
     if (abs(targetPosition) < 0.05) { //if the camera says that the object is less than 0.05 away from the center
       myRobot.TankDrive(0.3,0.3) //go forward with a speed of 0.3
     }
