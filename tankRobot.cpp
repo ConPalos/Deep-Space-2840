@@ -97,8 +97,6 @@ void Robot::TeleopPeriodic() {
   }
 
   if (armTop()) {
-
-  }
 }
 
 void Robot::TestPeriodic() {}
