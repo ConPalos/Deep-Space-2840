@@ -26,7 +26,7 @@
 
 //declaring the sticks and whatnot
 
-double speed, sensitivity, turn, targetPosition;
+double speed, turn, targetPosition;
 
 frc::Joystick stick{0};
 frc::Spark left{0}, right{2}, box{1};
@@ -94,9 +94,8 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {
-  sensitivity = axis(1);
-  turn = axis(3);
-  speed = /*trueMap(stick.GetRawAxis(1), 1, -1, 1, 0) * */ sensitivity;
+  turn = axis(4); //right stick
+  speed = axis(5); //right stick
   targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2);
 
   myRobot.ArcadeDrive(speed, turn);

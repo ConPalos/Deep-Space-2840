@@ -13,52 +13,52 @@
 
 double axis(int axisNumber)
 {
-    return trueMap(stick.GetRawAxis(axisNumber), 1.0, -1.0, 1.0, 0.0);
+    return stick.GetRawAxis(axisNumber);
 };
 
 bool intake()
 { //intake the ball
-    return stick.GetRawButton(1);
+    return stick.GetRawButton(5); //left bumper
 }
 
 bool shooter()
 { //shoot the ball
-    return stick.GetRawButton(2);
+    return stick.GetRawButton(6); //right bumper
 }
 
 bool armTop()
 { //arm to top level
-    return stick.GetRawButton(3);
+    return stick.GetPOV() == 0; //D-pad up
 }
 
 bool armMiddle()
 { //arm to middle level
-    return stick.GetRawButton(4);
+    return stick.GetPOV() == 270; //D-pad either side
 }
 
 bool armBottom()
 { //arm to bottom level
-    return stick.GetRawButton(5);
+    return stick.GetPOV() == 180; //D-pad bottom
 }
 
 bool armReset()
 { //fully retract arm
-    return stick.GetRawButton(6);
+    return stick.GetPOV() == 90;
 }
 
 bool panelUp()
 { //pick up the panel
-    return stick.GetRawButton(7);
+    return axis(2) == 1.0; //left trigger
 }
 
 bool panelDown()
 { //place the panel
-    return stick.GetRawButton(8);
+    return axis(3) == 1.0; //right trigger
 }
 
 bool armAlign()
 { //align the robot with the rocket
-    return stick.GetRawButton(9);
+    return stick.GetRawButton(2); //B button
 }
 
 OI::OI()
