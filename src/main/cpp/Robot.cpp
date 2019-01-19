@@ -104,13 +104,13 @@ void Robot::TeleopPeriodic() {
 
   if (armTop()) {
 		if (abs(targetPosition) < 0.05) {
-			myRobot(0.3, 0.0);
+			myRobot.ArcadeDrive(0.3, 0.0);
 		}
 		else if (abs(targetPosition) < 0.1) {
-			myRobot(0.2, -targetPosition);
+			myRobot.ArcadeDrive(0.2, -targetPosition);
 		}
 		else if (abs(targetPosition) <= 0.2) {
-			myRobot(0.0, -targetPosition);
+			myRobot.ArcadeDrive(0.0, -targetPosition);
 		}
   }
 }
