@@ -100,7 +100,6 @@ void Robot::TeleopPeriodic()
 
   myRobot.ArcadeDrive(speed, turn);
 
-  //
   if (intake())
   {
     box.Set(0.3);
