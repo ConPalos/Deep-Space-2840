@@ -92,17 +92,18 @@ void Robot::TeleopPeriodic() {
 
   myRobot.ArcadeDrive(speed, turn);
 
+  // 
   if (intake()) {
     box.Set(0.3);
   }
   else if (shooter()) {
-    placeCargo();
+    box.Set(-0.5);
   }
   else if (!intake() && !shooter()) {
     box.Set(0.0);
   }
 
-  if (armTop()) {
+  if (armAlign()) {
 		if (abs(targetPosition) < 0.05) {
 			myRobot.ArcadeDrive(0.3, 0.0);
 		}
@@ -116,11 +117,6 @@ void Robot::TeleopPeriodic() {
 }
 
 void Robot::TestPeriodic() {}
-
-void placeCargo() {
-
-  box.Set(-0.5);
-}
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

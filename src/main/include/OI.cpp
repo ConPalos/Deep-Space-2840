@@ -47,5 +47,9 @@ bool panelDown() { //place the panel
     return stick.GetRawButton(8);
 }
 
+bool armAlign() { //align the robot with the rocket
+    return stick.GetRawButton(9);
+}
+
 OI::OI() { //I don't really know why this is here
 }

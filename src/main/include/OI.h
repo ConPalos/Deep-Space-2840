@@ -21,6 +21,7 @@ class OI {
   bool armReset();
   bool panelUp();
   bool panelDown();
+  bool armAlign();
   double axis(int axisNumber);
   OI();
 };
