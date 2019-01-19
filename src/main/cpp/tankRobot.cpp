@@ -97,8 +97,8 @@ void Robot::TeleopPeriodic() {
   }
 
   if (armTop()) {
-
-  }
+    
+  
 }
 
 void Robot::TestPeriodic() {}
@@ -108,5 +108,4 @@ void placeCargo() {
 }
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
 #endif
