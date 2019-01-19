@@ -108,7 +108,7 @@ void Robot::TeleopPeriodic()
   }
   else if (shooter())
   {
-    placeCargo(); //moves the box with a speed of -0.3 if shooter button is pressed
+    box.Set(-0.5); //moves the box with a speed of -0.3 if shooter button is pressed
     //the shooter button can be found in OI.cpp
   }
   else if (!intake() && !shooter())
@@ -120,17 +120,17 @@ void Robot::TeleopPeriodic()
   { //if somebody presses the armAlign button
     if (abs(targetPosition) < 0.05)
     {                             //if the camera says that the object is less than 0.05 away from the center
-      myRobot.TankDrive(0.3, 0.3) //go forward with a speed of 0.3
-    }
+      myRobot.TankDrive(0.3, 0.3); //go forward with a speed of 0.3
+    };
     else if (targetPosition > -0.1 && targetPosition < 0)
     {                                                    //if the camera says that the object is less then 0.1 to the left
       myRobot.TankDrive(0.2 + abs(targetPosition), 0.2); //go left with a speed of 0.2
       //and right with a speed of 0.2 + the absolute value of targetPosition
-    }
+    };
     else if (targetPosition < 0.1 && targetPosition > 0)
     { //this one is the inverse of the last one
       myRobot.TankDrive(0.2, 0.2+abs(targetPosition);
-    }
+    };
     else if (targetPosition <= 0.2 && targetPosition > 0)
     {                                            //if the camera says that the object is more than 0.1 to the right
       myRobot.TankDrive(0.0, abs(targetPosition);//turn left with a speed of the absolute value of targetPosition
@@ -141,7 +141,7 @@ void Robot::TeleopPeriodic()
     }
   }
 
-  void Robot::TestPeriodic() {}
+
 
   void placeCargo()
   {
