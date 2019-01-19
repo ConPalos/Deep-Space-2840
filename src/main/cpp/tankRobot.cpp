@@ -97,8 +97,9 @@ void Robot::TeleopPeriodic() {
   }
 
   if (armTop()) {
-    
-  
+    if (abs(targetPosition) < 0.05) {
+      myRobot.TankDrive(0.3,0.3)
+    }
 }
 
 void Robot::TestPeriodic() {}
