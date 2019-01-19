@@ -17,5 +17,6 @@
     "memory": "cpp"
   },
   "C_Cpp.intelliSenseEngineFallback": "Enabled",
-  "C_Cpp.default.configurationProvider": "vscode-wpilib"
+  "C_Cpp.default.configurationProvider": "vscode-wpilib",
+  "C_Cpp.clang_format_fallbackStyle": "Google"
 }

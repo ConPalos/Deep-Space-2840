@@ -41,6 +41,7 @@ void Robot::RobotInit()
   AutoChooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", AutoChooser);
 
+  //create a dropdown menu for choosing drive style
   TeleopChooser.SetDefaultOption("Arcade Drive", Robot.cpp);
   TeleopChooser.AddOption("Tank Drive", tankDrive.cpp);
   frc::SmartDashboard::PutData("Drive Modes", TeleopChooser);
