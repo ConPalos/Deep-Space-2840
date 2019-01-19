@@ -29,7 +29,12 @@ frc::RobotDrive myRobot{left, right};
 frc::AnalogInput ai{0};
 frc::AnalogPotentiometer armTilt{1};
 
-double leftJoy, rightJoy;
+double leftJoy, rightJoy, targetPosition; /*
+leftJoy and RightJoy are the left joystick and the right joystick respectively.
+The axes can be declared using the function leftJoy = axis(axisNumber) or rightJoy = axis(axisNumber).
+targetPosition returns the X Coordinate of the target object where -2.0 is the furthest left, 0.0 is the center,
+and 2.0 is the furthest right
+*/
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
@@ -81,35 +86,38 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
-  leftJoy = axis(1);
-  rightJoy = axis(3);
-
-  myRobot.TankDrive(leftJoy, rightJoy);
+  leftJoy = axis(1); //declares leftJoy as axis number 1
+  rightJoy = axis(3); //declares rightJoy as axis number 3
+  targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //see declarations for details
+  myRobot.TankDrive(leftJoy, rightJoy); //declares leftJoy and rightJoy as the left and right side, respectively
   
   if (intake()) {
-    box.Set(0.3);
+    box.Set(0.3); //moves the box with a speed of 0.3 if intake button is pressed
+    //the intake button can be found in OI.cpp
   }
   else if (shooter()) {
-    placeCargo();
+    placeCargo(); //moves the box with a speed of -0.3 if shooter button is pressed
+    //the shooter button can be found in OI.cpp
   }
   else if (!intake() && !shooter()) {
-    box.Set(0.0);
+    box.Set(0.0); //if neither are pressed, nothing happens? I'm unclear on this one.
   }
 
   if (armTop()) {
-    if (abs(targetPosition) < 0.05) {
-      myRobot.TankDrive(0.3,0.3)
+    if (abs(targetPosition) < 0.05) { //if the camera says that the object is less than 0.05 away from the center
+      myRobot.TankDrive(0.3,0.3) //go forward with a speed of 0.3
     }
-    else if (targetPosition > -0.1 && targetPosition < 0) {
-      myRobot.TankDrive(0.2 + abs(targetPosition), 0.2);
+    else if (targetPosition > -0.1 && targetPosition < 0) { //if the camera says that the object is less then 0.1 to the left
+      myRobot.TankDrive(0.2 + abs(targetPosition), 0.2); //go left with a speed of 0.2
+      //and right with a speed of 0.2 + the absolute value of targetPosition
     }
-    else if (targetPosition < 0.1 && targetPosition >  0) {
+    else if (targetPosition < 0.1 && targetPosition >  0) {//this one is the inverse of the last one
       myRobot.TankDrive(0.2, 0.2+abs(targetPosition);
     }
-    else if (targetPosition <= 0.2 && targetPosition > 0) {
-      myRobot.TankDrive(0.0, abs(targetPosition);
+    else if (targetPosition <= 0.2 && targetPosition > 0) {//if the camera says that the object is more than 0.1 to the right
+      myRobot.TankDrive(0.0, abs(targetPosition);//turn left with a speed of the absolute value of targetPosition
     }
-    else if (targetPosition >= -0.2 && targetPosition < 0) {
+    else if (targetPosition >= -0.2 && targetPosition < 0) {//and vice versa
       myRobot.TankDrive(abs(targetPosition), 0.0);
     }
 }
