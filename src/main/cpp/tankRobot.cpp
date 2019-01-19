@@ -100,6 +100,18 @@ void Robot::TeleopPeriodic() {
     if (abs(targetPosition) < 0.05) {
       myRobot.TankDrive(0.3,0.3)
     }
+    else if (targetPosition > -0.1 && targetPosition < 0) {
+      myRobot.TankDrive(0.2 + abs(targetPosition), 0.2);
+    }
+    else if (targetPosition < 0.1 && targetPosition >  0) {
+      myRobot.TankDrive(0.2, 0.2+abs(targetPosition);
+    }
+    else if (targetPosition <= 0.2 && targetPosition > 0) {
+      myRobot.TankDrive(0.0, abs(targetPosition);
+    }
+    else if (targetPosition >= -0.2 && targetPosition < 0) {
+      myRobot.TankDrive(abs(targetPosition), 0.0);
+    }
 }
 
 void Robot::TestPeriodic() {}
