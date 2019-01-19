@@ -33,12 +33,17 @@ frc::Spark left{0}, right{2}, box{1};
 frc::RobotDrive myRobot{left, right};
 frc::AnalogInput ai{0};
 frc::AnalogPotentiometer armTilt{1};
+frc::SendableChooser TeleopChooser, AutoChooser;
 
 void Robot::RobotInit()
 {
-  m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
-  m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  AutoChooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
+  AutoChooser.AddOption(kAutoNameCustom, kAutoNameCustom);
+  frc::SmartDashboard::PutData("Auto Modes", AutoChooser);
+
+  TeleopChooser.SetDefaultOption("Arcade Drive", Robot.cpp);
+  TeleopChooser.AddOption("Tank Drive", tankDrive.cpp);
+  frc::SmartDashboard::PutData("Drive Modes", TeleopChooser);
 }
 
 /**
@@ -64,7 +69,7 @@ void Robot::RobotPeriodic() {}
  */
 void Robot::AutonomousInit()
 {
-  m_autoSelected = m_chooser.GetSelected();
+  m_autoSelected = AutoChooser.GetSelected();
   m_autoSelected = frc::SmartDashboard::GetString("Auto Selector", kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
