@@ -108,7 +108,7 @@ void Robot::TeleopPeriodic()
   }
   else if (shooter())
   {
-    placeCargo(); //moves the box with a speed of -0.3 if shooter button is pressed
+    //moves the box with a speed of -0.3 if shooter button is pressed
     //the shooter button can be found in OI.cpp
   }
   else if (!intake() && !shooter())
