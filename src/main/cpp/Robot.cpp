@@ -141,6 +141,11 @@ void Robot::TestPeriodic() {}
 #ifndef RUNNING_FRC_TESTS
 int main()
 {
-  return frc::StartRobot<Robot>();
+  if (AutoChooser.GetSelected() == 'Arcade Drive') {
+    return frc::StartRobot<Robot>();
+  }
+  if (AutoChooser.GetSelected() == 'Tank Drive') {
+    return frc::StartRobot<tankRobot>();
+  }
 }
 #endif
