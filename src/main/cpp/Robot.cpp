@@ -129,15 +129,16 @@ void Robot::TeleopPeriodic()
     {
       myRobot.ArcadeDrive(0.3, 0.0); //move forward with a speed of 0.3 out of -1.0 to 1.0
     }
-    else if (abs(targetPosition) < 0.1) //if the object is less than 0.` away from the cetner
+    else if (abs(targetPosition) < 0.1) //if the object is less than 0.05 away from the center
     {
       myRobot.ArcadeDrive(0.2, -targetPosition); //move forward with a speed of 0.2
       //and turn in the opposite direction of targetPosition
       //which moves it towards the object
     }
-    else if (abs(targetPosition) <= 0.2)
-    {
-      myRobot.ArcadeDrive(0.0, -targetPosition);
+    else if (abs(targetPosition) <= 0.2) //if the object is less than or equal to 0.2 away from the center
+    { //(Which is the maximum)
+      myRobot.ArcadeDrive(0.0, -targetPosition); //turn in the opposite direction of targetPosition
+      //which moves it towards the object
     }
   }
 }
@@ -147,11 +148,11 @@ void Robot::TestPeriodic() {}
 #ifndef RUNNING_FRC_TESTS
 int main()
 {
-  if (AutoChooser.GetSelected() == 'Arcade Drive') {
-    return frc::StartRobot<Robot>();
+  if (AutoChooser.GetSelected() == 'Arcade Drive') { //if 'Arcade Drive' is selected
+    return frc::StartRobot<Robot>(); //use robot.cpp
   }
-  if (AutoChooser.GetSelected() == 'Tank Drive') {
-    return frc::StartRobot<tankRobot>();
+  if (AutoChooser.GetSelected() == 'Tank Drive') { //if 'Tank Drive' is selected
+    return frc::StartRobot<tankRobot>(); //use tankRobot.cpp
   }
 }
 #endif
