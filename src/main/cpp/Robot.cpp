@@ -28,12 +28,12 @@
 
 double speed, turn, targetPosition;
 
-frc::Joystick stick{0};
-frc::Spark left{0}, right{2}, box{1};
-frc::RobotDrive myRobot{left, right};
-frc::AnalogInput ai{0};
-frc::AnalogPotentiometer armTilt{1};
-frc::SendableChooser TeleopChooser, AutoChooser;
+frc::Joystick stick{0}; //declares stick as Joystick in port 0
+frc::Spark left{0}, right{2}, box{1}; //declares the motors
+frc::RobotDrive myRobot{left, right}; //left controls left side, right controls right side
+frc::AnalogInput ai{0}; //declares analog in port 0 as ai
+frc::AnalogPotentiometer armTilt{1}; //declares armTilt as the potentiometer in port 1
+frc::SendableChooser TeleopChooser, AutoChooser; 
 
 void Robot::RobotInit()
 {
@@ -42,9 +42,9 @@ void Robot::RobotInit()
   frc::SmartDashboard::PutData("Auto Modes", AutoChooser);
 
   //create a dropdown menu for choosing drive style
-  TeleopChooser.SetDefaultOption("Arcade Drive", Robot.cpp);
-  TeleopChooser.AddOption("Tank Drive", tankDrive.cpp);
-  frc::SmartDashboard::PutData("Drive Modes", TeleopChooser);
+  TeleopChooser.SetDefaultOption("Arcade Drive", Robot.cpp); //declares "Arcade Drive" as the default option
+  TeleopChooser.AddOption("Tank Drive", tankDrive.cpp); //declares "Tank Drive" as an additional option
+  frc::SmartDashboard::PutData("Drive Modes", TeleopChooser); 
 }
 
 /**
@@ -102,36 +102,43 @@ void Robot::TeleopPeriodic()
 {
   turn = axis(4); //right stick
   speed = axis(5); //right stick
-  targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2);
+  targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //maps the voltage returned by ai
+  //to -.2 to .2 from 0.0 to 3.3
 
   myRobot.ArcadeDrive(speed, turn);
 
   if (intake())
-  {
+  { //if intake button is pressed, move box with a speed of 0.3 out of -1.0 to 1.0
+  //see OI.cpp for button declarations
     box.Set(0.3);
   }
   else if (shooter())
-  {
+  { //if shooter button is pressed, move box with a speed of -0.5 out of -1.0 to 1.0
+  //see OI.cpp for button declarations
     box.Set(-0.5);
   }
   else if (!intake() && !shooter())
-  {
+  {//if neither button is pressed, do diddly squat
     box.Set(0.0);
   }
 
   if (armAlign())
-  {
-    if (abs(targetPosition) < 0.05)
+  {//if armAlign is pressed
+    if (abs(targetPosition) < 0.05) //if the object is less that 0.05 away from the center
+    //on a scale of -0.2 to 0.2
     {
-      myRobot.ArcadeDrive(0.3, 0.0);
+      myRobot.ArcadeDrive(0.3, 0.0); //move forward with a speed of 0.3 out of -1.0 to 1.0
     }
-    else if (abs(targetPosition) < 0.1)
+    else if (abs(targetPosition) < 0.1) //if the object is less than 0.05 away from the center
     {
-      myRobot.ArcadeDrive(0.2, -targetPosition);
+      myRobot.ArcadeDrive(0.2, -targetPosition); //move forward with a speed of 0.2
+      //and turn in the opposite direction of targetPosition
+      //which moves it towards the object
     }
-    else if (abs(targetPosition) <= 0.2)
-    {
-      myRobot.ArcadeDrive(0.0, -targetPosition);
+    else if (abs(targetPosition) <= 0.2) //if the object is less than or equal to 0.2 away from the center
+    { //(Which is the maximum)
+      myRobot.ArcadeDrive(0.0, -targetPosition); //turn in the opposite direction of targetPosition
+      //which moves it towards the object
     }
   }
 }
@@ -141,11 +148,11 @@ void Robot::TestPeriodic() {}
 #ifndef RUNNING_FRC_TESTS
 int main()
 {
-  if (AutoChooser.GetSelected() == 'Arcade Drive') {
-    return frc::StartRobot<Robot>();
+  if (AutoChooser.GetSelected() == 'Arcade Drive') { //if 'Arcade Drive' is selected
+    return frc::StartRobot<Robot>(); //use robot.cpp
   }
-  if (AutoChooser.GetSelected() == 'Tank Drive') {
-    return frc::StartRobot<tankRobot>();
+  if (AutoChooser.GetSelected() == 'Tank Drive') { //if 'Tank Drive' is selected
+    return frc::StartRobot<tankRobot>(); //use tankRobot.cpp
   }
 }
 #endif
