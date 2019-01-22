@@ -10,9 +10,8 @@
 // #pragma once
 #include <frc/Joystick.h>
 
-class OI
-{
-public:
+class OI {
+ public:
   frc::Joystick stick{0};
   bool intake();
   bool shooter();
