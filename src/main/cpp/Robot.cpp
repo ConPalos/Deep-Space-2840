@@ -86,8 +86,8 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
-  turn = axis(4);   // right stick
-  speed = axis(5);  // right stick
+  turn = axis(2);   // right stick. use stick(4) if xbox 360
+  speed = -axis(1);  // right stick. use stick(5) if xbox 360
   targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2);  // maps the voltage returned by ai
   // to -.2 to .2 from 0.0 to 3.3
 
