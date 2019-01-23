@@ -17,7 +17,7 @@
 #include <frc/Joystick.h>
 #include <frc/SmartDashboard/SendableChooser.h>
 #include <frc/SmartDashboard/SmartDashboard.h>
-#include <timer.h>
+#include <frc/timer.h>
 #include <frc/Spark.h>
 #include <frc/WPILib.h>
 #include <OI.cpp>
@@ -28,7 +28,6 @@
 
 double speed, turn, targetPosition;
 
-frc::Joystick stick{0};                // declares stick as Joystick in port 0
 frc::Spark left{0}, right{2}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};        // left controls left side, right controls right side
 frc::AnalogInput ai{0};  // declares analog in port 0 as ai

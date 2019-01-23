@@ -11,10 +11,11 @@
 //rather than typing trueMap(stick.GetRawAxis(number), 1.0, -1.0, 1.0, 0.0)
 //which takes forever
 
+frc::Joystick stick{0};
 double axis(int axisNumber)
 {
     return stick.GetRawAxis(axisNumber);
-};
+}
 
 bool intake()
 { //intake the ball

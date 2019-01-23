@@ -13,7 +13,7 @@
 #include <frc/IterativeRobot.h>
 #include <frc/SmartDashboard/SendableChooser.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <timer.h>
+#include <frc/timer.h>
 #include <cameraServer/CameraServer.h>
 #include <frc/Spark.h>
 #include <frc/Joystick.h>
@@ -23,7 +23,6 @@
 
 #include <math.h>
 
-frc::Joystick stick{0};
 frc::Spark left{0}, right{2}, box{1};
 frc::RobotDrive myRobot{left, right};
 frc::AnalogInput ai{0};
