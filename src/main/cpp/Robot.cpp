@@ -32,7 +32,7 @@ frc::Spark left{0}, right{2}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};  // left controls left side, right controls right side
 frc::AnalogInput ai{0};  // declares analog in port 0 as ai
 frc::AnalogPotentiometer armTilt{1};  // declares armTilt as the potentiometer in port 1
-frc::DoubleSolenoid panelLift{1, 2};
+frc::DoubleSolenoid panelLift{1, 2}, arm1{3, 4}, arm2{5, 6};
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -112,6 +112,23 @@ void Robot::TeleopPeriodic() {
     else if (abs(targetPosition()) <= 0.2) { // if the object is less than or equal to 0.2 (maximum) away from the center
       myRobot.ArcadeDrive(0.0, -targetPosition());  // turn in the opposite direction of targetPosition which moves it towards the object
     }
+  }
+
+  if (armReset()) {
+    arm1.Set(frc::DoubleSolenoid::Value::kReverse);
+    arm2.Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+  else if (armBottom()) {
+    arm1.Set(frc::DoubleSolenoid::Value::kReverse);
+    arm2.Set(frc::DoubleSolenoid::Value::kForward);
+  }
+  else if (armMiddle()) {
+    arm1.Set(frc::DoubleSolenoid::Value::kForward);
+    arm2.Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+  else if (armTop()) {
+    arm1.Set(frc::DoubleSolenoid::Value::kForward);
+    arm2.Set(frc::DoubleSolenoid::Value::kForward);
   }
 }
 
