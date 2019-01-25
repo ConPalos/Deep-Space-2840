@@ -7,11 +7,16 @@
 
 #include <OI.h>
 #include <frc/Joystick.h>
+#include <SageFunctions.h>
+
 //Axis allows you to just type axis(number),
 //rather than typing trueMap(stick.GetRawAxis(number), 1.0, -1.0, 1.0, 0.0)
 //which takes forever
-
+frc::AnalogInput ai{0};  // declares analog in port 0 as ai
 frc::Joystick stick{0};
+double targetPosition(){
+    return trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //maps the shit on the other shit
+}
 double axis(int axisNumber)
 {
     return stick.GetRawAxis(axisNumber);
