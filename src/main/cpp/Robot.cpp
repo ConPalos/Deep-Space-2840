@@ -26,12 +26,13 @@
 
 // declaring the sticks and whatnot
 
-double speed, turn, targetPosition;
+double speed, turn;
 
 frc::Spark left{0}, right{2}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};  // left controls left side, right controls right side
 frc::AnalogInput ai{0};  // declares analog in port 0 as ai
 frc::AnalogPotentiometer armTilt{1};  // declares armTilt as the potentiometer in port 1
+frc::DoubleSolenoid panelLift{1, 2};
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -87,8 +88,6 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
   turn = axis(2);   // right stick. use stick(4) if xbox 360
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
-  targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2);  // maps the voltage returned by ai
-  // to -.2 to .2 from 0.0 to 3.3
 
   myRobot.ArcadeDrive(speed, turn);
 
@@ -104,14 +103,14 @@ void Robot::TeleopPeriodic() {
   }
 
   if (armAlign()) {  // if armAlign is pressed
-    if (abs(targetPosition) < 0.05) { // if the object is less that 0.05 away from the center on a scale of -0.2 to 0.2
+    if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away from the center on a scale of -0.2 to 0.2
       myRobot.ArcadeDrive(0.3, 0.0);  // move forward with a speed of 0.3 out of -1.0 to 1.0
     }
-    else if (abs(targetPosition) < 0.1) { // if the object is less than 0.05 away from the center
-      myRobot.ArcadeDrive(0.2, -targetPosition);  // move forward with a speed of 0.2 and turn in the opposite direction of targetPosition
+    else if (abs(targetPosition()) < 0.1) { // if the object is less than 0.05 away from the center
+      myRobot.ArcadeDrive(0.2, -targetPosition());  // move forward with a speed of 0.2 and turn in the opposite direction of targetPosition
     }
-    else if (abs(targetPosition) <= 0.2) { // if the object is less than or equal to 0.2 (maximum) away from the center
-      myRobot.ArcadeDrive(0.0, -targetPosition);  // turn in the opposite direction of targetPosition which moves it towards the object
+    else if (abs(targetPosition()) <= 0.2) { // if the object is less than or equal to 0.2 (maximum) away from the center
+      myRobot.ArcadeDrive(0.0, -targetPosition());  // turn in the opposite direction of targetPosition which moves it towards the object
     }
   }
 }
