@@ -4,6 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+/*
 #include <iostream>
 #include <memory>
 #include <string>
@@ -24,7 +25,7 @@
 #include <math.h>
 
 frc::Spark left{0}, right{2}, box{1};
-frc::RobotDrive myRobot{left, right};
+frc::DifferentialDrive myRobot{left, right};
 frc::AnalogInput ai{0};
 frc::AnalogPotentiometer armTilt{1};
 
@@ -34,6 +35,7 @@ The axes can be declared using the function leftJoy = axis(axisNumber) or rightJ
 targetPosition returns the X Coordinate of the target object where -2.0 is the furthest left, 0.0 is the center,
 and 2.0 is the furthest right
 */
+/*
 void Robot::RobotInit()
 {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -49,6 +51,7 @@ void Robot::RobotInit()
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
+/*
 void Robot::RobotPeriodic() {}
 
 /**
@@ -62,6 +65,7 @@ void Robot::RobotPeriodic() {}
  * if-else structure below with additional strings. If using the SendableChooser
  * make sure to add them to the chooser code above as well.
  */
+/*
 void Robot::AutonomousInit()
 {
   m_autoSelected = m_chooser.GetSelected();
@@ -97,7 +101,7 @@ void Robot::TeleopPeriodic()
 {
   leftJoy = axis(1);                                              //declares leftJoy as axis number 1
   rightJoy = axis(3);                                             //declares rightJoy as axis number 3
-  targetPosition = trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //see declarations for details
+  targetPosition = SageFunctions::trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //see declarations for details
   myRobot.TankDrive(leftJoy, rightJoy);                           //declares leftJoy and rightJoy as the left and right side, respectively
 
   if (intake())
@@ -139,6 +143,8 @@ void Robot::TeleopPeriodic()
       myRobot.TankDrive(abs(targetPosition), 0.0);
     }
   }
+}
 //f wgvytewvgewhvge
 #ifndef RUNNING_FRC_TESTS
 #endif
+*/
