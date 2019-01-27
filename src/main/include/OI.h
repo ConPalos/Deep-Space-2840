@@ -26,4 +26,4 @@ class OI {
   OI();
 };
 
-#endif OI_H
+#endif
