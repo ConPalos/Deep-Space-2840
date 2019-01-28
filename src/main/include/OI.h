@@ -9,6 +9,7 @@
 #define OI_H
 // #pragma once
 #include <frc/Joystick.h>
+#include "SageFunctions.h"
 
 class OI {
  public:
