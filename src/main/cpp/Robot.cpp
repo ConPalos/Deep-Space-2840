@@ -84,6 +84,12 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
+/*
+* Every packet sent during the robot's teleoperated mode checks for the condition of the joystick.
+* Each function is a check for a specific button, axis, or POV on the joystick. See OI.cpp for the
+* button each function is connected to.
+*/
+
 void Robot::TeleopPeriodic() {
   turn = axis(2);   // right stick. use stick(4) if xbox 360
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
@@ -92,7 +98,6 @@ void Robot::TeleopPeriodic() {
 
   if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
     box.Set(0.3); // out of -1.0 to 1.0
-                  // see OI.cpp for button declarations
   }
   else if (shooter()) {  // if shooter button is pressed, move box with a
     box.Set(-0.5);         // speed of -0.5 out of -1.0 to 1.0
