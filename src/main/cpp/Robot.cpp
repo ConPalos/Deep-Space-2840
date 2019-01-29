@@ -107,16 +107,21 @@ void Robot::TeleopPeriodic() {
   }
 
   /*if (armAlign()) {  // if armAlign is pressed
-    if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away from the center on a scale of -0.2 to 0.2
-      myRobot.ArcadeDrive(0.3, 0.0);  // move forward with a speed of 0.3 out of -1.0 to 1.0
+    if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
+  from the center on a scale of -0.2 to 0.2 myRobot.ArcadeDrive(0.3, 0.0);  //
+  move forward with a speed of 0.3 out of -1.0 to 1.0
     }
-    else if (abs(targetPosition()) < 0.1) { // if the object is less than 0.05 away from the center
-      myRobot.ArcadeDrive(0.2, -targetPosition());  // move forward with a speed of 0.2 and turn in the opposite direction of targetPosition
+    else if (abs(targetPosition()) < 0.1) { // if the object is less than 0.05
+  away from the center myRobot.ArcadeDrive(0.2, -targetPosition());  // move
+  forward with a speed of 0.2 and turn in the opposite direction of
+  targetPosition
     }
-    else if (abs(targetPosition()) <= 0.2) { // if the object is less than or equal to 0.2 (maximum) away from the center
-      myRobot.ArcadeDrive(0.0, -targetPosition());  // turn in the opposite direction of targetPosition which moves it towards the object
+    else if (abs(targetPosition()) <= 0.2) { // if the object is less than or
+  equal to 0.2 (maximum) away from the center myRobot.ArcadeDrive(0.0,
+  -targetPosition());  // turn in the opposite direction of targetPosition which
+  moves it towards the object
     }
-  }
+  }*/
 
   if (armReset()) {
     arm1.Set(frc::DoubleSolenoid::Value::kReverse);
@@ -133,7 +138,7 @@ void Robot::TeleopPeriodic() {
   else if (armTop()) {
     arm1.Set(frc::DoubleSolenoid::Value::kForward);
     arm2.Set(frc::DoubleSolenoid::Value::kForward);
-  }*/
+  }
 }
 
 void Robot::TestPeriodic() {}
