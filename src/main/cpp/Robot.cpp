@@ -96,11 +96,11 @@ void Robot::TeleopPeriodic() {
 
   myRobot.ArcadeDrive(speed, turn);
 
-  if (shooter()) {  // if shooter button is pressed, move box with a speed of 0.3
-    box.Set(-1); // out of -1.0 to 1.0
+  if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
+    box.Set(-0.3); // out of -1.0 to 1.0
   }
-  else if (intake()) {  // if intake button is pressed, move box with a
-    box.Set(0.3);         // speed of -0.5 out of -1.0 to 1.0
+  else if (shooter()) {  // if shooter button is pressed, move box with a
+    box.Set(1);         // speed of -0.5 out of -1.0 to 1.0
   }
   else if (!intake() && !shooter()) {  // if neither button is pressed, do diddly squat
     box.Set(0.0);
