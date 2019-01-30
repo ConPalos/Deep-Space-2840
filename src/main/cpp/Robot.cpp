@@ -91,9 +91,20 @@ void Robot::TeleopInit() {}
 */
 
 void Robot::TeleopPeriodic() {
-  turn = axis(2);   // right stick. use stick(4) if xbox 360
-  speed = -axis(1);  // right stick. use stick(5) if xbox 360
+    // right stick. use stick(5) if xbox 360
 
+  if (R90()) {
+    turn = 1;
+    speed = 0;
+  }
+  else if (L90()) {
+    turn = -1;
+    speed = 0;
+  }
+  else {
+    turn = -axis(2);   // right stick. use stick(4) if xbox 360
+    speed = -axis(1);
+  }
   myRobot.ArcadeDrive(speed, turn);
 
   if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
