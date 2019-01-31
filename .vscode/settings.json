@@ -24,5 +24,6 @@
   "editor.parameterHints.enabled":true, 
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces":false, 
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-  "C_Cpp.configurationWarnings": "Disabled"
+  "C_Cpp.configurationWarnings": "Disabled",
+  "wpilib.skipTests": false
 }
