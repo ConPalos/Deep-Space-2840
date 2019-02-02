@@ -95,32 +95,16 @@ void Robot::TeleopPeriodic() {
     // right stick. use stick(5) if xbox 360
 
   if (R90()) {
-    turn = -0.8;
+    turn = 1;
     speed = 0;
   }
   else if (L90()) {
-    turn = 0.8;
+    turn = -1;
     speed = 0;
   }
   else {
-    if (axis(2) > 0.8) {
-      turn = -0.8;
-    }
-    else if (axis(2) < -0.8) {
-      turn = 0.8;
-    }
-    else {
-      turn = -axis(2);
-    }//1000
-    if (axis(1) > 0.8) {
-      speed = -0.8;
-    }
-    else if (axis(1) < -0.8) {
-      speed = 0.8;
-    }
-    else{
-      speed = -axis(1);
-    }
+    turn = -axis(2);   // right stick. use stick(4) if xbox 360
+    speed = -axis(1);
   }
   myRobot.ArcadeDrive(speed, turn);
 
