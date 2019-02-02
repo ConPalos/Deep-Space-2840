@@ -28,7 +28,7 @@
 
 double speed, turn;
 
-frc::Spark left{0}, right{2}, box{1};  // declares the motors
+frc::Spark left{0}, left2{3}, right{2}, right2{4}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};  // left controls left side, right controls right side
 frc::AnalogPotentiometer armTilt{1};  // declares armTilt as the potentiometer in port 1
 frc::DoubleSolenoid panelLift{1, 2}, arm1{3, 4}, arm2{5, 6};
