@@ -18,7 +18,8 @@ frc::Joystick stick{0};
 //double targetPosition() {
  //   return trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //maps the shit on the other shit
 //}
-
+//Alex's Sevens:
+//77777777777777777777777777777777777777777777
 double axis(int axisNumber) {
     return stick.GetRawAxis(axisNumber);
 }
@@ -57,6 +58,12 @@ bool panelDown() { //place the panel
 
 bool armAlign() { //align the robot with the rocket
     return stick.GetRawButton(2); //B button
+}
+bool R90() {
+    return stick.GetRawButton(3);
+}
+bool L90(){
+    return stick.GetRawButton(1);
 }
 
 OI::OI() {
