@@ -19,6 +19,7 @@
 #include <frc/SmartDashboard/SmartDashboard.h>
 #include <frc/timer.h>
 #include <frc/Spark.h>
+#include <Encoder.h>
 #include <frc/WPILib.h>
 #include <OI.cpp>
 
@@ -30,8 +31,8 @@ double speed, turn;
 
 frc::Spark left{0}, right{2}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};  // left controls left side, right controls right side
-frc::AnalogPotentiometer armTilt{1};  // declares armTilt as the potentiometer in port 1
-frc::DoubleSolenoid panelLift{1, 2}, arm1{3, 4}, arm2{5, 6};
+frc::Encoder armTilt{};  // declares armTilt as the encoder in port 1
+frc::DoubleSolenoid panelLift{1, 2}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -123,21 +124,18 @@ void Robot::TeleopPeriodic() {
     }
   }*/
 
+  //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
   if (armReset()) {
-    arm1.Set(frc::DoubleSolenoid::Value::kReverse);
-    arm2.Set(frc::DoubleSolenoid::Value::kReverse);
+
   }
   else if (armBottom()) {
-    arm1.Set(frc::DoubleSolenoid::Value::kReverse);
-    arm2.Set(frc::DoubleSolenoid::Value::kForward);
+    
   }
   else if (armMiddle()) {
-    arm1.Set(frc::DoubleSolenoid::Value::kForward);
-    arm2.Set(frc::DoubleSolenoid::Value::kReverse);
+    
   }
   else if (armTop()) {
-    arm1.Set(frc::DoubleSolenoid::Value::kForward);
-    arm2.Set(frc::DoubleSolenoid::Value::kForward);
+    
   }
 }
 
