@@ -29,9 +29,9 @@
 
 double speed, turn;
 
-frc::Spark left{0}, left2{3}, right{2}, right2{4}, box{1};  // declares the motors
+frc::Spark left{0}, left2{3}, right{4}, right2{5}, box{1};  // declares the motors
 frc::RobotDrive myRobot{left, right};  // left controls left side, right controls right side
-frc::Encoder armTilt{};  // declares armTilt as the encoder in port 1
+//frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{1, 2}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 
 void Robot::RobotInit() {
