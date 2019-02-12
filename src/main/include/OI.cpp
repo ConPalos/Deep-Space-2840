@@ -9,55 +9,57 @@
 #include <SageFunctions.h>
 #include <frc/Joystick.h>
 
-// Axis allows you to just type axis(number),
-// rather than typing trueMap(stick.GetRawAxis(number), 1.0, -1.0, 1.0, 0.0)
-// which takes forever
+//Axis allows you to just type axis(number),
+//rather than typing trueMap(stick.GetRawAxis(number), 1.0, -1.0, 1.0, 0.0)
+//which takes forever
 frc::AnalogInput ai{0};  // declares analog in port 0 as ai
 frc::Joystick stick{0};
 
-// double targetPosition() {
+//double targetPosition() {
 //   return trueMap(ai.GetVoltage(), 3.3, 0.0, 0.2, -0.2); //maps the shit on
 //   the other shit
 //}
 
-double axis(int axisNumber) { return stick.GetRawAxis(axisNumber); }
-
-bool intake() {                  // intake the ball
-  return stick.GetRawButton(5);  // left bumper
+double axis(int axisNumber) {
+  return stick.GetRawAxis(axisNumber);
 }
 
-bool shooter() {                 // shoot the ball
-  return stick.GetRawButton(6);  // right bumper
+bool intake() {                  //intake the ball
+  return stick.GetRawButton(5);  //left bumper
 }
 
-bool armTop() {                // arm to top level
-  return stick.GetPOV() == 0;  // D-pad up
+bool shooter() {                 //shoot the ball
+  return stick.GetRawButton(6);  //right bumper
 }
 
-bool armMiddle() {               // arm to middle level
-  return stick.GetPOV() == 270;  // D-pad either side
+bool armTop() {                //arm to top level
+  return stick.GetPOV() == 0;  //D-pad up
 }
 
-bool armBottom() {               // arm to bottom level
-  return stick.GetPOV() == 180;  // D-pad bottom
+bool armMiddle() {               //arm to middle level
+  return stick.GetPOV() == 270;  //D-pad either side
 }
 
-bool armReset() {  // fully retract arm
+bool armBottom() {               //arm to bottom level
+  return stick.GetPOV() == 180;  //D-pad bottom
+}
+
+bool armReset() {                //fully retract arm
   return stick.GetPOV() == 90;
 }
 
-bool panelUp() {          // pick up the panel
-  return axis(2) == 1.0;  // left trigger
+bool panelUp() {          //pick up the panel
+  return axis(2) == 1.0;  //left trigger
 }
 
-bool panelDown() {        // place the panel
-  return axis(3) == 1.0;  // right trigger
+bool panelDown() {        //place the panel
+  return axis(3) == 1.0;  //right trigger
 }
 
-bool armAlign() {                // align the robot with the rocket
-  return stick.GetRawButton(2);  // B button
+bool armAlign() {                //align the robot with the rocket
+  return stick.GetRawButton(2);  //B button
 }
 
 OI::OI() {
-  // I don't really know why this is here
+  //I don't really know why this is here
 }
