@@ -107,6 +107,14 @@ void Robot::TeleopPeriodic() {
     box.Set(0.0);
   }
 
+  if (panelUp()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+  }
+
+  {if (panelDown()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+
   /*if (armAlign()) {  // if armAlign is pressed
     if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
   from the center on a scale of -0.2 to 0.2 myRobot.ArcadeDrive(0.3, 0.0);  //
