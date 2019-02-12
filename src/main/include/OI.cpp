@@ -49,11 +49,11 @@ bool armReset() {                //fully retract arm
 }
 
 bool panelUp() {          //pick up the panel
-  return axis(2) == 1.0;  //left trigger
+  return stick.GetRawButton(8);  //right trigger on logitech
 }
 
 bool panelDown() {        //place the panel
-  return axis(3) == 1.0;  //right trigger
+  return stick.GetRawButton(7);  //left trigger on logitech
 }
 
 bool armAlign() {                //align the robot with the rocket
