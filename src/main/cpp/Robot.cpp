@@ -48,7 +48,70 @@ void Robot::RobotInit() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {}
+void Robot::RobotPeriodic() {
+  turn = -axis(2);   // right stick. use stick(4) if xbox 360
+  speed = -axis(1);  // right stick. use stick(5) if xbox 360
+
+  //myRobot.ArcadeDrive(speed, turn);
+
+  if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
+    box.Set(-0.3); // out of -1.0 to 1.0
+  }
+  else if (shooter()) {  // if shooter button is pressed, move box with a
+    box.Set(1);         // speed of -0.5 out of -1.0 to 1.0
+  }
+  else if (!intake() && !shooter()) {  // if neither button is pressed, do diddly squat
+    box.Set(0.0);
+  }
+  if (speed > 0.75) { //all of this stuff is temporary 
+    arm.Set(0.75); 
+  }
+  else if (speed < -0.75) {
+    arm.Set(-0.75);
+  }
+  else {
+    arm.Set(speed);
+  }
+
+  if (panelUp()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+  }
+
+  if (panelDown()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+
+  /*if (armAlign()) {  // if armAlign is pressed
+    if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
+  from the center on a scale of -0.2 to 0.2 myRobot.ArcadeDrive(0.3, 0.0);  //
+  move forward with a speed of 0.3 out of -1.0 to 1.0
+    }
+    else if (abs(targetPosition()) < 0.1) { // if the object is less than 0.05
+  away from the center myRobot.ArcadeDrive(0.2, -targetPosition());  // move
+  forward with a speed of 0.2 and turn in the opposite direction of
+  targetPosition
+    }
+    else if (abs(targetPosition()) <= 0.2) { // if the object is less than or
+  equal to 0.2 (maximum) away from the center myRobot.ArcadeDrive(0.0,
+  -targetPosition());  // turn in the opposite direction of targetPosition which
+  moves it towards the object
+    }
+  }*/
+
+  //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
+  if (armReset()) {
+
+  }
+  else if (armBottom()) {
+    
+  }
+  else if (armMiddle()) {
+    
+  }
+  else if (armTop()) {
+    
+  }
+}
 
 /**
  * This autonomous (along with the chooser code above) shows how to select
@@ -91,62 +154,7 @@ void Robot::TeleopInit() {}
 * button each function is connected to.
 */
 
-void Robot::TeleopPeriodic() {
-  turn = -axis(2);   // right stick. use stick(4) if xbox 360
-  speed = -axis(1);  // right stick. use stick(5) if xbox 360
-
-  //myRobot.ArcadeDrive(speed, turn);
-
-  if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
-    box.Set(-0.3); // out of -1.0 to 1.0
-  }
-  else if (shooter()) {  // if shooter button is pressed, move box with a
-    box.Set(1);         // speed of -0.5 out of -1.0 to 1.0
-  }
-  else if (!intake() && !shooter()) {  // if neither button is pressed, do diddly squat
-    box.Set(0.0);
-  }
-  if (speed > 0.75) { //all of this stuff is temporary 
-    arm.Set(0.75); 
-  }
-  else if (speed < -0.75) {
-    arm.Set(-0.75);
-  }
-  else {
-    arm.Set(speed);
-  }
-
-  /*if (armAlign()) {  // if armAlign is pressed
-    if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
-  from the center on a scale of -0.2 to 0.2 myRobot.ArcadeDrive(0.3, 0.0);  //
-  move forward with a speed of 0.3 out of -1.0 to 1.0
-    }
-    else if (abs(targetPosition()) < 0.1) { // if the object is less than 0.05
-  away from the center myRobot.ArcadeDrive(0.2, -targetPosition());  // move
-  forward with a speed of 0.2 and turn in the opposite direction of
-  targetPosition
-    }
-    else if (abs(targetPosition()) <= 0.2) { // if the object is less than or
-  equal to 0.2 (maximum) away from the center myRobot.ArcadeDrive(0.0,
-  -targetPosition());  // turn in the opposite direction of targetPosition which
-  moves it towards the object
-    }
-  }*/
-
-  //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
-  if (armReset()) {
-
-  }
-  else if (armBottom()) {
-    
-  }
-  else if (armMiddle()) {
-    
-  }
-  else if (armTop()) {
-    
-  }
-}
+void Robot::TeleopPeriodic() {}
 
 void Robot::TestPeriodic() {}
 
