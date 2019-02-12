@@ -29,7 +29,7 @@
 
 double speed, turn;
 
-frc::Spark left{4}, left2{5}, right{0}, right2{1}, box{2};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, box{3}, arm{2};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{1, 2}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -95,7 +95,7 @@ void Robot::TeleopPeriodic() {
   turn = -axis(2);   // right stick. use stick(4) if xbox 360
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
 
-  myRobot.ArcadeDrive(speed, turn);
+  //myRobot.ArcadeDrive(speed, turn);
 
   if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
     box.Set(-0.3); // out of -1.0 to 1.0
@@ -105,6 +105,15 @@ void Robot::TeleopPeriodic() {
   }
   else if (!intake() && !shooter()) {  // if neither button is pressed, do diddly squat
     box.Set(0.0);
+  }
+  if (speed > 0.75) { //all of this stuff is temporary 
+    arm.Set(0.75); 
+  }
+  else if (speed < -0.75) {
+    arm.Set(-0.75);
+  }
+  else {
+    arm.Set(speed);
   }
 
   /*if (armAlign()) {  // if armAlign is pressed
