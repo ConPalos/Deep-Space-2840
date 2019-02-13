@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 
+//#include <Compressor.h>
 #include <OI.h>
 #include <SageFunctions.h>
 #include <cameraServer/CameraServer.h>
@@ -33,11 +34,14 @@ frc::Spark left{5}, left2{4}, right{0}, right2{1}, box{3}, arm{2};  // declares 
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{1, 2}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
+frc::Compressor compressor{0};
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  compressor.SetClosedLoopControl(true);
 }
 
 /**
