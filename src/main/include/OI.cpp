@@ -25,11 +25,11 @@ double axis(int axisNumber) {
 }
 
 bool intake() {                  //intake the ball
-  return stick.GetRawButton(5);  //left bumper
+  return stick.GetRawButton(7);  //left trigger
 }
 
 bool shooter() {                 //shoot the ball
-  return stick.GetRawButton(6);  //right bumper
+  return stick.GetRawButton(8);  //right trigger
 }
 
 bool armTop() {                //arm to top level
@@ -49,17 +49,16 @@ bool armReset() {                //fully retract arm
 }
 
 bool panelUp() {          //pick up the panel
-  return stick.GetRawButton(8);  //right trigger on logitech
+  return stick.GetRawButton(6);  //right bumper on logitech
 }
 
 bool panelDown() {        //place the panel
-  return stick.GetRawButton(7);  //left trigger on logitech
+  return stick.GetRawButton(5);  //left bumper on logitech
 }
 
 bool armAlign() {                //align the robot with the rocket
   return stick.GetRawButton(2);  //B button
 }
-
 OI::OI() {
   //I don't really know why this is here
 }

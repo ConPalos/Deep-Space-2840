@@ -29,7 +29,7 @@
 
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, box{3}, arm{2};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot{2}, arm{3}, box{6};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -67,11 +67,13 @@ void Robot::RobotPeriodic() {
     box.Set(0.0);
   }
   if (panelUp()) {
-    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+    //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+    pivot.Set(0.2);
   }
 
   if (panelDown()) {
-    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+    //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+    pivot.Set(-0.2);
   }
 
   /*if (armAlign()) {  // if armAlign is pressed
@@ -90,19 +92,19 @@ void Robot::RobotPeriodic() {
   moves it towards the object
     }
   }*/
-
+//777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
   //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
   if (armReset()) {
-
+    
   }
   else if (armBottom()) {
-    
+    arm.Set(-0.1);
   }
   else if (armMiddle()) {
-    
+    arm.Set(0.1);
   }
   else if (armTop()) {
-    
+    arm.Set(0.5);
   }
 }
 
