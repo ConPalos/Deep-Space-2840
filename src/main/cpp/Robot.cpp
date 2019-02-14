@@ -29,7 +29,7 @@
 
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot{2}, arm{3}, box{6};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot{6}, arm{3}, box{2};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -58,7 +58,7 @@ void Robot::RobotPeriodic() {
   myRobot.ArcadeDrive(speed, turn);
 
   if (intake()) {  // if intake button is pressed, move box with a speed of 0.3
-    box.Set(-0.3); // out of -1.0 to 1.0
+    box.Set(-1); // out of -1.0 to 1.0
   }
   else if (shooter()) {  // if shooter button is pressed, move box with a
     box.Set(1);         // speed of -0.5 out of -1.0 to 1.0
@@ -68,12 +68,12 @@ void Robot::RobotPeriodic() {
   }
   if (panelUp()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
-    pivot.Set(0.2);
+    pivot.Set(0.4);
   }
 
   if (panelDown()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
-    pivot.Set(-0.2);
+    pivot.Set(-0.4);
   }
 
   /*if (armAlign()) {  // if armAlign is pressed
@@ -101,10 +101,10 @@ void Robot::RobotPeriodic() {
     arm.Set(-0.1);
   }
   else if (armMiddle()) {
-    arm.Set(0.1);
+    arm.Set(0.3);
   }
   else if (armTop()) {
-    arm.Set(0.5);
+    arm.Set(0.75);
   }
 }
 

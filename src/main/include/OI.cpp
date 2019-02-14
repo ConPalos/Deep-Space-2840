@@ -33,15 +33,18 @@ bool shooter() {                 //shoot the ball
 }
 
 bool armTop() {                //arm to top level
-  return stick.GetPOV() == 0;  //D-pad up
+  //return stick.GetPOV() == 0;  //D-pad up
+  return stick.GetRawButton(4);
 }
 
 bool armMiddle() {               //arm to middle level
-  return stick.GetPOV() == 270;  //D-pad either side
+  //return stick.GetPOV() == 270;  //D-pad either side
+  return stick.GetRawButton(1);
 }
 
 bool armBottom() {               //arm to bottom level
-  return stick.GetPOV() == 180;  //D-pad bottom
+  //return stick.GetPOV() == 180;  //D-pad bottom
+  return stick.GetRawButton(2);
 }
 
 bool armReset() {                //fully retract arm
@@ -57,7 +60,7 @@ bool panelDown() {        //place the panel
 }
 
 bool armAlign() {                //align the robot with the rocket
-  return stick.GetRawButton(2);  //B button
+  //return stick.GetRawButton(2);  //B button
 }
 OI::OI() {
   //I don't really know why this is here
