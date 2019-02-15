@@ -34,7 +34,7 @@ frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{2}, arm{3
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
-//frc::Compressor *compressor = new frc::Compressor(0);
+frc::Compressor *compressor = new frc::Compressor(0);
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -55,7 +55,7 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() {
   turn = -axis(2);   // right stick. use stick(4) if xbox 360
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
-  //compressor->SetClosedLoopControl(true);
+  compressor->SetClosedLoopControl(true);
   myRobot.ArcadeDrive(speed, turn);
   if (stick.GetRawButton(8)) {  // if intake button is pressed, move box with a speed of 0.3
     pivot1.Set(-0.25); // out of -1.0 to 1.0
@@ -70,12 +70,12 @@ void Robot::RobotPeriodic() {
     pivot2.Set(0.0);
   }
   if (stick.GetRawButton(3)) {
-    //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
-    box.Set(0.4);
+    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+    //box.Set(0.4);
   }
   else if (stick.GetRawButton(1)) {
-    //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
-    box.Set(-0.4);
+    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+    //box.Set(-0.4);
   }
   else if (!stick.GetRawButton(1) && !stick.GetRawButton(3)) {
     box.Set(0.0);
@@ -99,21 +99,34 @@ void Robot::RobotPeriodic() {
   }*/
 //777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
   //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
-  if (armReset()) {
+//   if (armReset()) {
     
-  }
-  else if (stick.GetRawButton(2)) {
-    arm.Set(-0.1);
-  }
-  else if (stick.GetRawButton(6)) {
-    arm.Set(0.3);
-  }
-  else if (stick.GetRawButton(5)) {
-    arm.Set(0.75);
-  }
-  else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
-    arm.Set(0.0);
-  }
+//   }
+//   else if (stick.GetRawButton(2)) {
+//     arm.Set(-0.1);
+//   }
+//   else if (stick.GetRawButton(6)) {
+//     arm.Set(0.3);
+//   }
+//   else if (stick.GetRawButton(5)) {
+//     arm.Set(0.75);
+//   }
+//   else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
+//     arm.Set(0.0);
+//   }
+// }
+
+if (int frc::GenericHID::GetPOV(int pov = 0) const) {
+  arm.Set(0.75);
+}
+else if (int frc::GenericHID::GetPOV(int pov = 180) const) {
+  arm.Set(-0.1);
+}
+else if (int frc::GenericHID::GetPOV(int pov = 270) const) {
+  arm.Set(0.3);
+}
+else if (!int frc::GenericHID::GetPOV(int pov = 0) const && !int frc::GenericHID::GetPOV(int pov = 180) const && !int frc::GenericHID::GetPOV(int pov = 270) const) {
+  arm.Set(0.0);
 }
 
 /**
