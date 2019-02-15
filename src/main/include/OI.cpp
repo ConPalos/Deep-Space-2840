@@ -48,7 +48,7 @@ bool armBottom() {               //arm to bottom level
 }
 
 bool armReset() {                //fully retract arm
-  return stick.GetPOV() == 90;
+  //return stick.GetPOV() == 90;
 }
 
 bool panelUp() {          //pick up the panel
@@ -58,7 +58,9 @@ bool panelUp() {          //pick up the panel
 bool panelDown() {        //place the panel
   return stick.GetRawButton(5);  //left bumper on logitech
 }
-
+bool stopIntake() {
+  return stick.GetRawButton(10);
+}
 bool armAlign() {                //align the robot with the rocket
   //return stick.GetRawButton(2);  //B button
 }
