@@ -29,8 +29,8 @@
 
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot{2}, arm{3
-}, box{6};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{2}, arm{3
+}, box{6}, pivot2{7};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -57,28 +57,28 @@ void Robot::RobotPeriodic() {
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
   //compressor->SetClosedLoopControl(true);
   myRobot.ArcadeDrive(speed, turn);
-  if (stick.GetRawButton(10)) {
-    pivot.Set(0.0);
-  }
-  else if (stick.GetRawButton(8)) {  // if intake button is pressed, move box with a speed of 0.3
-    pivot.Set(-1.0); // out of -1.0 to 1.0
+  if (stick.GetRawButton(8)) {  // if intake button is pressed, move box with a speed of 0.3
+    pivot1.Set(-0.25); // out of -1.0 to 1.0
+    pivot2.Set(0.25);
   }
   else if (stick.GetRawButton(7)) {  // if shooter button is pressed, move box with a
-    pivot.Set(1.0);         // speed of -0.5 out of -1.0 to 1.0
+    pivot1.Set(0.25);         // speed of -0.5 out of -1.0 to 1.0
+    pivot2.Set(-0.25);
   }
-  else {  // if neither button is pressed, do diddly squat
-    pivot.Set(0.0);
+  else if (!stick.GetRawButton(8) && !stick.GetRawButton(7)) {  // if neither button is pressed, do diddly squat
+    pivot1.Set(0.0);
+    pivot2.Set(0.0);
   }
   if (stick.GetRawButton(3)) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
-    //box.Set(0.4);
+    box.Set(0.4);
   }
   else if (stick.GetRawButton(1)) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
-    //box.Set(-0.4);
+    box.Set(-0.4);
   }
   else if (!stick.GetRawButton(1) && !stick.GetRawButton(3)) {
-    //box.Set(0.0);
+    box.Set(0.0);
   }
 
   /*if (armAlign()) {  // if armAlign is pressed
