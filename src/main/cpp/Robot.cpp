@@ -19,7 +19,7 @@
 #include <frc/SmartDashboard/SmartDashboard.h>
 #include <frc/timer.h>
 #include <frc/Spark.h>
-#include <Encoder.h>
+#include <frc/Encoder.h>
 #include <frc/WPILib.h>
 #include <OI.cpp>
 #include <frc/PowerDistributionPanel.h>
@@ -30,8 +30,7 @@
 
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{2}, arm{3
-}, box{6}, pivot2{7};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{2}, arm{3}, box{6}, pivot2{7};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
 //frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -41,7 +40,7 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  frc::PowerDistributionPanel::ClearStickyFaults;
+  //frc::PowerDistributionPanel::ClearStickyFaults();
   
 }
 
@@ -117,7 +116,7 @@ void Robot::RobotPeriodic() {
 //if (int frc::GenericHID::GetPOV(int pov = 0) const) {
 //  arm.Set(0.75);
 //}
-//else if (int frc::GenericHID::GetPOV(int pov = 180) const) {
+//else if (frc::GenericHID::GetPOV(int pov = 180) const) {
 //  arm.Set(-0.1);
 //}
 //else if (int frc::GenericHID::GetPOV(int pov = 270) const) {
