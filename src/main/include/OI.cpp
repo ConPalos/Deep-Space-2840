@@ -23,12 +23,7 @@ frc::Joystick stick{0};
 double axis(int axisNumber) {
   return stick.GetRawAxis(axisNumber);
 }
-bool pivotUp() {
-  return axis(2) > 0.25;
-}
-bool pivotDown() {
-  return axis(3) > 0.25;
-}
+
 bool intake() {                  //intake the ball
   return stick.GetRawButton(7);  //left trigger
 }
