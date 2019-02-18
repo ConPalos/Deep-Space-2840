@@ -54,19 +54,19 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  turn = -axis(2);   // right stick. use stick(4) if xbox 360
+  turn = -axis(4);   // right stick. use stick(4) if xbox 360
   speed = -axis(1);  // right stick. use stick(5) if xbox 360
   //compressor->SetClosedLoopControl(true);
   myRobot.ArcadeDrive(speed, turn);
-  if (stick.GetRawButton(8)) {  // if intake button is pressed, move box with a speed of 0.3
+  if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
     pivot1.Set(-0.25); // out of -1.0 to 1.0
     pivot2.Set(0.25);
   }
-  else if (stick.GetRawButton(7)) {  // if shooter button is pressed, move box with a
+  else if (pivotDown()) {  // if shooter button is pressed, move box with a
     pivot1.Set(0.25);         // speed of -0.5 out of -1.0 to 1.0
     pivot2.Set(-0.25);
   }
-  else if (!stick.GetRawButton(8) && !stick.GetRawButton(7)) {  // if neither button is pressed, do diddly squat
+  else if (!pivotUp() && !pivotDown()) {  // if neither button is pressed, do diddly squat
     pivot1.Set(0.0);
     pivot2.Set(0.0);
   }
@@ -74,11 +74,11 @@ void Robot::RobotPeriodic() {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
     box.Set(0.4);
   }
-  else if (stick.GetRawButton(1)) {
+  else if (stick.GetRawButton(4)) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
     box.Set(-0.4);
   }
-  else if (!stick.GetRawButton(1) && !stick.GetRawButton(3)) {
+  else if (!stick.GetRawButton(3) && !stick.GetRawButton(4)) {
     box.Set(0.0);
   }
 
@@ -103,18 +103,15 @@ void Robot::RobotPeriodic() {
 //   if (armReset()) {
     
 //   }
-//   else if (stick.GetRawButton(2)) {
-//     arm.Set(-0.1);
-//   }
-//   else if (stick.GetRawButton(6)) {
-//     arm.Set(0.3);
-//   }
-//   else if (stick.GetRawButton(5)) {
-//     arm.Set(0.75);
-//   }
-//   else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
-//     arm.Set(0.0);
-//   }
+   if (stick.GetRawButton(6)) {
+     arm.Set(0.3);
+   }
+   else if (stick.GetRawButton(5)) {
+     arm.Set(0.75);
+   }
+   else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
+     arm.Set(0.0);
+   }
 // }
 
 //if (int frc::GenericHID::GetPOV(int pov = 0) const) {
