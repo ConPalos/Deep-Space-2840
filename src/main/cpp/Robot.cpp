@@ -30,17 +30,17 @@
 
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{2}, arm{3}, box{6}, pivot2{7};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, arm{7}, box{2}, pivot2{6};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
-//frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
-//frc::Compressor *compressor = new frc::Compressor(0);
+//frc::Compressor *compressor = new //frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
+//frc::Compressor(0);
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  //frc::PowerDistributionPanel::ClearStickyFaults();
+  //frc::PowerDistributionPanel ClearStickyFaults();
   
 }
 
@@ -53,17 +53,18 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  frc::PowerDistributionPanel ClearStickyFaults();
   turn = -axis(4);   // right stick. use stick(4) if xbox 360
-  speed = -axis(1);  // right stick. use stick(5) if xbox 360
+  speed = axis(1);  // right stick. use stick(5) if xbox 360
   //compressor->SetClosedLoopControl(true);
   myRobot.ArcadeDrive(speed, turn);
   if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
     pivot1.Set(-0.25); // out of -1.0 to 1.0
-    pivot2.Set(0.25);
+    pivot2.Set(-0.25);
   }
   else if (pivotDown()) {  // if shooter button is pressed, move box with a
     pivot1.Set(0.25);         // speed of -0.5 out of -1.0 to 1.0
-    pivot2.Set(-0.25);
+    pivot2.Set(0.25);
   }
   else if (!pivotUp() && !pivotDown()) {  // if neither button is pressed, do diddly squat
     pivot1.Set(0.0);
@@ -71,11 +72,11 @@ void Robot::RobotPeriodic() {
   }
   if (stick.GetRawButton(3)) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
-    box.Set(0.4);
+    box.Set(0.8);
   }
   else if (stick.GetRawButton(4)) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
-    box.Set(-0.4);
+    box.Set(-0.8);
   }
   else if (!stick.GetRawButton(3) && !stick.GetRawButton(4)) {
     box.Set(0.0);
@@ -102,10 +103,10 @@ void Robot::RobotPeriodic() {
 //   if (armReset()) {
     
 //   }
-   if (stick.GetRawButton(6)) {
+   if (stick.GetRawButton(5)) {
      arm.Set(0.3);
    }
-   else if (stick.GetRawButton(5)) {
+   else if (stick.GetRawButton(6)) {
      arm.Set(0.75);
    }
    else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
