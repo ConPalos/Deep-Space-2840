@@ -23,6 +23,8 @@
 #include <frc/WPILib.h>
 #include <OI.cpp>
 #include <frc/PowerDistributionPanel.h>
+#include <LiveWindow/LiveWindow.h>
+#include "PigeonIMU.h"
 
 #include <math.h>
 
@@ -32,10 +34,13 @@ double speed, turn;
 
 frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, arm{7}, box{2}, pivot2{6};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
-//frc::Encoder armTilt{0};  // declares armTilt as the encoder in port 1
+frc::Talon Talon{7};
+//frc::Encoder armTilt{7};  // declares armTilt as the encoder in port 1
+Encoder *armTilt;
+armTilt = new Encoder(0, 1, false, Encoder::EncodingType::k4X);
 //frc::Compressor *compressor = new //frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 //frc::Compressor(0);
-
+armTilt.setMaxPeriod(0.05);
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);

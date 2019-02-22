@@ -13,8 +13,9 @@
   }, 
   "wpilib.online":true, 
   "files.associations": {
-    "iostream":"cpp", 
-    "memory":"cpp"
+    "iostream": "cpp",
+    "memory": "cpp",
+    "*.inc": "cpp"
   }, 
   
   "C_Cpp.intelliSenseEngineFallback": "Enabled",
