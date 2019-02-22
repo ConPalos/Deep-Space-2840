@@ -30,11 +30,11 @@ bool pivotDown() {
   return axis(3) > 0.25;
 }
 bool intake() {                  //intake the ball
-  return stick.GetRawButton(7);  //left trigger
+  return stick.GetRawButton(3);  //left trigger
 }
 
 bool shooter() {                 //shoot the ball
-  return stick.GetRawButton(8);  //right trigger
+  return stick.GetRawButton(4);  //right trigger
 }
 
 bool armTop() {                //arm to top level

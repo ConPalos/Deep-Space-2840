@@ -75,15 +75,16 @@ void Robot::RobotPeriodic() {
     pivot1.Set(0.0);
     pivot2.Set(0.0);
   }
-  if (stick.GetRawButton(3)) {
+  
+  if (intake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
     box.Set(0.8);
   }
-  else if (stick.GetRawButton(4)) {
+  else if (shooter()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
     box.Set(-0.8);
   }
-  else if (!stick.GetRawButton(3) && !stick.GetRawButton(4)) {
+  else if (!intake() && !shooter()) {
     box.Set(0.0);
   }
 
