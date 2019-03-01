@@ -77,7 +77,7 @@ void Robot::RobotPeriodic() {
     pivot2.Set(0.0);
   }
   
-  if (intake()) {
+  if (ballIntake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
     box.Set(0.8);
   }
@@ -85,10 +85,18 @@ void Robot::RobotPeriodic() {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
     box.Set(-0.8);
   }
-  else if (!intake() && !shooter()) {
+  else if (!ballIntake() && !shooter()) {
     box.Set(0.0);
   }
-
+  if (panelIntake()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+  }
+  else if (panelOuttake()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+  else if (!panelIntake() && !panelOuttake()) {
+    panelLift.Set(frc::DoubleSolenoid::Value::kOff);
+  }
   /*if (armAlign()) {  // if armAlign is pressed
     if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
   from the center on a scale of -0.2 to 0.2 myRobot.ArcadeDrive(0.3, 0.0);  //
