@@ -24,6 +24,8 @@
 #include <OI.cpp>
 #include <frc/PowerDistributionPanel.h>
 #include <LiveWindow/LiveWindow.h>
+#include "networktables/NetworkTable.h"
+#include "networkTables/NetworkTableInstance.h"
 //#include "PigeonIMU.h"
 
 #include <math.h>
@@ -59,6 +61,11 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+  double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
+  double targetArea = table->GetNumber("ta",0.0);
+  double targetSkew = table->GetNumber("ts",0.0);
   compressor->SetClosedLoopControl(true);
   turn = -axis(4);   // right stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
