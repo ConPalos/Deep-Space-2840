@@ -57,23 +57,17 @@ bool armReset() {                //fully retract arm
 }
 
 bool panelUp() {          //pick up the panel
-  return stick.GetRawButton(6);  //right bumper on logitech
+  return stick.GetRawButton(7);  //right bumper on logitech
 }
 
 bool panelDown() {        //place the panel
-  return stick.GetRawButton(5);  //left bumper on logitech
+  return stick.GetRawButton(8);  //left bumper on logitech
 }
 bool stopIntake() {
   return stick.GetRawButton(10);
 }
 bool armAlign() {                //align the robot with the rocket
   //return stick.GetRawButton(2);  //B button
-}
-bool panelIntake() {
-  return stick.GetRawButton(7);
-}
-bool panelOuttake() {
-  return stick.GetRawButton(8);
 }
 OI::OI() {
   //I don't really know why this is here

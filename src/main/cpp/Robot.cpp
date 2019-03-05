@@ -95,13 +95,13 @@ void Robot::RobotPeriodic() {
   else if (!ballIntake() && !shooter()) {
     box.Set(0.0);
   }
-  if (panelIntake()) {
+  if (panelUp()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kForward);
   }
-  else if (panelOuttake()) {
+  else if (panelDown()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
   }
-  else if (!panelIntake() && !panelOuttake()) {
+  else if (!panelUp() && !panelDown()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kOff);
   }
   /*if (armAlign()) {  // if armAlign is pressed
