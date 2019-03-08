@@ -23,33 +23,33 @@
 #include <frc/WPILib.h>
 #include <OI.cpp>
 #include <frc/PowerDistributionPanel.h>
-#include <LiveWindow/LiveWindow.h>
+#include <frc/LiveWindow/LiveWindow.h>
 #include "networktables/NetworkTable.h"
 #include "networkTables/NetworkTableInstance.h"
 //#include "PigeonIMU.h"
+#include <ctre/Phoenix.h>
 
 #include <math.h>
 
 // declaring the sticks and whatnot
-
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, arm{7}, box{2}, pivot2{6};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
-frc::Talon Talon{7};
-//frc::Encoder armTilt{7};  // declares armTilt as the encoder in port 1
-//Encoder *armTilt;
-//armTilt = new Encoder(0, 1, false, Encoder::EncodingType::k4X);
-frc::Compressor *compressor = new frc::Compressor(0);
+//frc::Talon Talon{7};
+TalonSRX arm = {14};
+frc::Encoder *armTilt = new frc::Encoder(1, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
+frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
-//frc::Compressor(0);
-//armTilt.setMaxPeriod(0.05);
+//armTilt->SetMinRate(1);
+
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  //frc::PowerDistributionPanel ClearStickyFaults();
-  
+  arm.Set(ControlMode::PercentOutput, 0);
+  armTilt->Reset();
 }
 
 /**
@@ -61,22 +61,25 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  int count = armTilt->Get();
+  double distance = armTilt->GetDistance();
+  bool direction = armTilt->GetDirection();
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-  double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0);
-  double targetArea = table->GetNumber("ta",0.0);
-  double targetSkew = table->GetNumber("ts",0.0);
-  compressor->SetClosedLoopControl(true);
-  turn = -axis(4);   // right stick. use stick(4) if xbox 360
+  double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0); //returns the offset of the target from the center of the camera in the x direction
+  double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0); //returns the offset of the target from the center of the camera in the y direction
+  double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
+  double targetSkew = table->GetNumber("ts",0.0); //Ditto
+  //compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
+  turn = -axis(4);  // right stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
-  //compressor->SetClosedLoopControl(true);
+  compressor->SetClosedLoopControl(false);
   myRobot.ArcadeDrive(speed, turn);
   if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
     pivot1.Set(-0.25); // out of -1.0 to 1.0
     pivot2.Set(-0.25);
   }
   else if (pivotDown()) {  // if shooter button is pressed, move box with a
-    pivot1.Set(0.25);         // speed of -0.5 out of -1.0 to 1.0
+    pivot1.Set(0.25); // speed of -0.5 out of -1.0 to 1.0
     pivot2.Set(0.25);
   }
   else if (!pivotUp() && !pivotDown()) {  // if neither button is pressed, do diddly squat
@@ -95,13 +98,13 @@ void Robot::RobotPeriodic() {
   else if (!ballIntake() && !shooter()) {
     box.Set(0.0);
   }
-  if (panelUp()) {
+  if (panelIntake()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kForward);
   }
-  else if (panelDown()) {
+  else if (panelOuttake()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
   }
-  else if (!panelUp() && !panelDown()) {
+  else if (!panelIntake() && !panelOuttake()) {
     panelLift.Set(frc::DoubleSolenoid::Value::kOff);
   }
   /*if (armAlign()) {  // if armAlign is pressed
@@ -126,14 +129,32 @@ void Robot::RobotPeriodic() {
     
 //   }
    if (stick.GetRawButton(5)) {
-     arm.Set(0.3);
+     arm.Set(ControlMode::PercentOutput, 0.3);
    }
    else if (stick.GetRawButton(6)) {
-     arm.Set(0.75);
+     arm.Set(ControlMode::PercentOutput, 0.7);
    }
-   else if (!stick.GetRawButton(2) && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
-     arm.Set(0.0);
+   else if (armMiddle()) {
+     arm.Set(ControlMode::PercentOutput, -0.7);
    }
+   else if (!armMiddle() && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
+     arm.Set(ControlMode::PercentOutput, 0.0);
+   }
+   if (armBottom()) {
+     if (distance > 0.3) {
+       arm.Set(ControlMode::PercentOutput, -0.3);
+     }
+     else if (distance < -0.3) {
+       arm.Set(ControlMode::PercentOutput, 0.3);
+     }
+     else if (distance > -0.3 && distance < 0.3) {
+       arm.Set(ControlMode::PercentOutput, 0.0);
+     }
+    if (stick.GetRawButton(3)) {
+      std::cout << count;
+    }
+   }
+}
 // }
 
 //if (int frc::GenericHID::GetPOV(int pov = 0) const) {
@@ -147,7 +168,7 @@ void Robot::RobotPeriodic() {
 //}
 //else if (!int frc::GenericHID::GetPOV(int pov = 0) const && !int frc::GenericHID::GetPOV(int pov = 180) const && !int frc::GenericHID::GetPOV(int pov = 270) const) {
 //  arm.Set(0.0);
-}
+
 
 /**
  * This autonomous (along with the chooser code above) shows how to select

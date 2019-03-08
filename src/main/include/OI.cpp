@@ -4,15 +4,20 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 #include <OI.h>
 #include <SageFunctions.h>
 #include <frc/Joystick.h>
 
+/***************************************************************
+ * how to get POV goosy-whatsits:                              *
+ * POV is the D-Pad                                            *
+ * return stick.getPOV() = 0 will tell you if the up is pressed*
+ * use 90 for right, 180, for down, 270 for left,              *
+ * -1 for not pressed.                                         *
+ * *************************************************************/
 //Axis allows you to just type axis(number),
 //rather than typing trueMap(stick.GetRawAxis(number), 1.0, -1.0, 1.0, 0.0)
 //which takes forever
-frc::AnalogInput ai{0};  // declares analog in port 0 as ai
 frc::Joystick stick{0};
 
 //double targetPosition() {
@@ -43,8 +48,8 @@ bool armTop() {                //arm to top level
 }
 
 bool armMiddle() {               //arm to middle level
-  //return stick.GetPOV() == 270;  //D-pad either side
-  return stick.GetRawButton(1);
+  return stick.GetPOV() == 90;  //D-pad up
+  //return stick.GetRawButton(1);
 }
 
 bool armBottom() {               //arm to bottom level
@@ -57,17 +62,23 @@ bool armReset() {                //fully retract arm
 }
 
 bool panelUp() {          //pick up the panel
-  return stick.GetRawButton(7);  //right bumper on logitech
+  return stick.GetRawButton(6);  //right bumper on logitech
 }
 
 bool panelDown() {        //place the panel
-  return stick.GetRawButton(8);  //left bumper on logitech
+  return stick.GetRawButton(5);  //left bumper on logitech
 }
 bool stopIntake() {
   return stick.GetRawButton(10);
 }
 bool armAlign() {                //align the robot with the rocket
   //return stick.GetRawButton(2);  //B button
+}
+bool panelIntake() {
+  return stick.GetRawButton(7);
+}
+bool panelOuttake() {
+  return stick.GetRawButton(8);
 }
 OI::OI() {
   //I don't really know why this is here
