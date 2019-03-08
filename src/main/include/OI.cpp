@@ -29,56 +29,36 @@ double axis(int axisNumber) {
   return stick.GetRawAxis(axisNumber);
 }
 bool pivotUp() {
-  return axis(2) > 0.25;
+  return stick.GetRawButon(6);
 }
 bool pivotDown() {
   return axis(3) > 0.25;
 }
 bool ballIntake() {                  //intake the ball
-  return stick.GetRawButton(3);  //left trigger
+  return stick.GetRawButton(1);  //left trigger
 }
 
 bool shooter() {                 //shoot the ball
-  return stick.GetRawButton(4);  //right trigger
+  return stick.GetRawButton(2);  //right trigger
 }
 
-bool armTop() {                //arm to top level
+bool armUp() {                //arm to top level
   //return stick.GetPOV() == 0;  //D-pad up
-  return stick.GetRawButton(4);
+  return axis(2) > 0.25;
 }
-
-bool armMiddle() {               //arm to middle level
-  return stick.GetPOV() == 90;  //D-pad up
-  //return stick.GetRawButton(1);
-}
-
-bool armBottom() {               //arm to bottom level
+bool armHold() {               //arm to bottom level
   //return stick.GetPOV() == 180;  //D-pad bottom
-  return stick.GetRawButton(2);
+  return stick.GetRawButton(5);
 }
 
 bool armReset() {                //fully retract arm
   //return stick.GetPOV() == 90;
 }
-
-bool panelUp() {          //pick up the panel
-  return stick.GetRawButton(6);  //right bumper on logitech
-}
-
-bool panelDown() {        //place the panel
-  return stick.GetRawButton(5);  //left bumper on logitech
-}
-bool stopIntake() {
-  return stick.GetRawButton(10);
-}
-bool armAlign() {                //align the robot with the rocket
-  //return stick.GetRawButton(2);  //B button
-}
 bool panelIntake() {
-  return stick.GetRawButton(7);
+  return stick.GetRawButton(3);
 }
 bool panelOuttake() {
-  return stick.GetRawButton(8);
+  return stick.GetRawButton(4);
 }
 OI::OI() {
   //I don't really know why this is here

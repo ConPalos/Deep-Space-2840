@@ -34,10 +34,10 @@
 // declaring the sticks and whatnot
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6}, arm{7]};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Talon Talon{7};
-TalonSRX arm = {14};
+//TalonSRX arm = {14};
 frc::Encoder *armTilt = new frc::Encoder(1, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
 frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
@@ -126,33 +126,15 @@ void Robot::RobotPeriodic() {
 //777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
   //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
 //   if (armReset()) {
-    
 //   }
-   if (stick.GetRawButton(5)) {
+   if (armHold()) {
      arm.Set(ControlMode::PercentOutput, 0.3);
    }
-   else if (stick.GetRawButton(6)) {
+   else if (armUp()) {
      arm.Set(ControlMode::PercentOutput, 0.7);
    }
-   else if (armMiddle()) {
-     arm.Set(ControlMode::PercentOutput, -0.7);
-   }
-   else if (!armMiddle() && !stick.GetRawButton(6) && !stick.GetRawButton(5)) {
+   else if (!armHold() && !armUp()) {
      arm.Set(ControlMode::PercentOutput, 0.0);
-   }
-   if (armBottom()) {
-     if (distance > 0.3) {
-       arm.Set(ControlMode::PercentOutput, -0.3);
-     }
-     else if (distance < -0.3) {
-       arm.Set(ControlMode::PercentOutput, 0.3);
-     }
-     else if (distance > -0.3 && distance < 0.3) {
-       arm.Set(ControlMode::PercentOutput, 0.0);
-     }
-    if (stick.GetRawButton(3)) {
-      std::cout << count;
-    }
    }
 }
 // }
