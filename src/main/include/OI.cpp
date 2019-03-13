@@ -29,7 +29,7 @@ double axis(int axisNumber) {
   return stick.GetRawAxis(axisNumber);
 }
 bool pivotUp() {
-  return stick.GetRawButon(6);
+  return stick.GetRawButton(6);
 }
 bool pivotDown() {
   return axis(3) > 0.25;

@@ -34,11 +34,11 @@
 // declaring the sticks and whatnot
 double speed, turn;
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6}, arm{7]};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6}, arm{7};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Talon Talon{7};
 //TalonSRX arm = {14};
-frc::Encoder *armTilt = new frc::Encoder(1, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
+//frc::Encoder *armTilt = new frc::Encoder(1, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
 frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 //armTilt->SetMinRate(1);
@@ -48,8 +48,8 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  arm.Set(ControlMode::PercentOutput, 0);
-  armTilt->Reset();
+  //arm.Set(ControlMode::PercentOutput, 0);
+  //armTilt->Reset();
 }
 
 /**
@@ -61,15 +61,15 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  int count = armTilt->Get();
-  double distance = armTilt->GetDistance();
-  bool direction = armTilt->GetDirection();
+  //int count = armTilt->Get();
+  //double distance = armTilt->GetDistance();
+  //bool direction = armTilt->GetDirection();
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
   double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0); //returns the offset of the target from the center of the camera in the x direction
   double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0); //returns the offset of the target from the center of the camera in the y direction
   double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
   double targetSkew = table->GetNumber("ts",0.0); //Ditto
-  //compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
+  compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
   turn = -axis(4);  // right stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
   compressor->SetClosedLoopControl(false);
@@ -128,13 +128,13 @@ void Robot::RobotPeriodic() {
 //   if (armReset()) {
 //   }
    if (armHold()) {
-     arm.Set(ControlMode::PercentOutput, 0.3);
+     arm.Set(0.3);
    }
    else if (armUp()) {
-     arm.Set(ControlMode::PercentOutput, 0.7);
+     arm.Set(0.7);
    }
    else if (!armHold() && !armUp()) {
-     arm.Set(ControlMode::PercentOutput, 0.0);
+     arm.Set(0.0);
    }
 }
 // }
