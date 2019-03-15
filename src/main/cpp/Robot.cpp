@@ -70,7 +70,7 @@ void Robot::RobotPeriodic() {
   double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
   double targetSkew = table->GetNumber("ts",0.0); //Ditto
   compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
-  turn = -axis(0);  // left stick. use stick(4) if xbox 360
+  turn = -axis(4);  // left stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
   myRobot.ArcadeDrive(speed, turn);
   if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
