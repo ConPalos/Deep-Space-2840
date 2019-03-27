@@ -16,9 +16,10 @@ class OI {
   frc::Joystick stick{0};
   bool intake();
   bool shooter();
-  bool armTop();
   bool armMiddle();
+  bool armLower(); 
   bool armBottom();
+  bool armUpper(); 
   bool armReset();
   bool panelUp();
   bool panelDown();
@@ -26,5 +27,7 @@ class OI {
   double axis(int axisNumber);
   OI();
 };
+
+// hey there fren
 
 #endif
