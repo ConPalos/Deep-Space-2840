@@ -46,13 +46,25 @@ bool armUp() {                //arm to top level
   //return stick.GetPOV() == 0;  //D-pad up
   return axis(2) > 0.25;
 }
+
+bool armUpper() {           // put the arm upper position
+  return stick.GetRawButton(7); // two windows button
+}
+
+bool armMiddle() {         // put the arm at middle position
+  return stick.GetRawButton(8); // three lines button
+}
+
+bool armLower() {          // put the arm at lower position
+  return stick.GetRawButton(9); // push down on left joystick
+}
 bool armHold() {               //arm to bottom level
   //return stick.GetPOV() == 180;  //D-pad bottom
   return stick.GetRawButton(5);
 }
 
 bool armReset() {                //fully retract arm
-  //return stick.GetPOV() == 90;
+  return stick.GetPOV() == 90;
 }
 bool panelIntake() {
   return stick.GetRawButton(3);
