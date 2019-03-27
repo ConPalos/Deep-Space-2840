@@ -34,22 +34,45 @@
 // declaring the sticks and whatnot
 double speed, turn;
 
+double armscale = 1.0; //THIS IS THE SCALING FACTOR FOR THE ENCODER TO BE CALCULATED ON THURSDAY
+/*
+                     _____________                   __            
+|            |      |                  \        /   |  |          /\
+|            |      |                   \      /    |  |         /  \
+|            |      |                    \    /     |  |        /_  _\
+|————————————|      |————————             \  /      |  |          || 
+|            |      |                      ||       |__|          ||
+|            |      |                      ||        __           ||
+|            |      |_____________         ||       |__|          ||
+
+INSTRUCTIONS:
+
+1) Check the value of count after raising the arm from the ground to the lower cargo.
+2) Check the value of count after raising the arm from the ground to the middle cargo.
+3) Check the value of count after raising the arm from the ground to the upper cargo.
+4) Find the GCF of those numbers. If they're all coprime, go to step seven.
+5) The greatest common factor exists! Congratulations! Set armScale to the value of the GCF you just found.
+6) Divide your three numbers by the GCF.
+7) Put those numbers into the arm sequence. It'll be marked with a large ASCII 1, 2, and 3 respectively.
+
+*/
+
 frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6}, arm{7};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Talon Talon{7};
 //TalonSRX arm = {14};
-//frc::Encoder *armTilt = new frc::Encoder(1, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
+frc::Encoder *armTilt = new frc::Encoder(0, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
 frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
 frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 //armTilt->SetMinRate(1);
-
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   //arm.Set(ControlMode::PercentOutput, 0);
-  //armTilt->Reset();
+  armTilt->Reset();
+  armTilt.setDistancePerPulse(armScale);
 }
 
 /**
@@ -61,14 +84,54 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  //int count = armTilt->Get();
-  //double distance = armTilt->GetDistance();
-  //bool direction = armTilt->GetDirection();
+  //encoder stuff!!
+  int count = armTilt->Get();
+  double distance = armTilt->GetDistance();
+  bool direction = armTilt->GetDirection();
+  /*  ___
+     /   |
+    / /| |
+   |_/ | |
+       | |
+       | |
+       | |
+    ___| |___
+   |_________|
+  */
+  double lowerTilt = 1;
+  /*  __________________
+     |                  |
+     |_______________   |
+                     |  |
+      _______________|  |
+     |                  |
+     |   _______________|
+     |  |       
+     |  |_______________
+     |                  |
+     |__________________|
+  */
+  double middleTilt = 1;
+  /* ____________________
+    |                    |
+    |_________________   |
+                      |  |
+     _________________|  |
+    |                    |
+    |_________________   |
+                      |  |
+     _________________|  |
+    |                    |
+    |____________________|
+  */
+  double upperTilt = 1;
+  //limelight stuff!!
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
   double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0); //returns the offset of the target from the center of the camera in the x direction
   double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0); //returns the offset of the target from the center of the camera in the y direction
   double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
   double targetSkew = table->GetNumber("ts",0.0); //Ditto
+  
   compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
   turn = -axis(4);  // left stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
@@ -122,33 +185,63 @@ void Robot::RobotPeriodic() {
   moves it towards the object
     }
   }*/
-//777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-  //The encoder will send a PWM signal of width 1 to 4096 microseconds depending on position at 244 Hz
-//   if (armReset()) {
-//   }
-   if (armHold()) {
-     arm.Set(0.3);
-   }
-   else if (armUp()) {
-     arm.Set(0.7);
-   }
-   else if (!armHold() && !armUp()) {
-     arm.Set(0.0);
-   }
+
+  if(armReset()) {
+    if(distance > 0) {
+      arm.Set(-0.5);
+    }
+    else {
+      arm.Set(0.0);
+    }
+  }
+  else if(armLower()) {
+    if(distace > lowerTilt) {
+      arm.Set(-0.5);
+    }
+    if(distance < lowerTilt) {
+      arm.Set(0.5);
+    }
+    else {
+      arm.Set(0.0);
+    }
+  }
+  else if(armMiddle()) {
+    if(distance > middleTilt) {
+      arm.Set(-0.5);
+    }
+    if(distance < middleTilt) {
+      arm.Set(0.5);
+    }
+    else {
+      arm.Set(0.0);
+    }
+  }
+  else if(armUpper()) {
+    if(distance > upperTilt) {
+      arm.Set(-0.25);
+    }
+    if(distance < upperTilt) {
+      arm.Set(0.5);
+    }
+    else {
+      arm.Set(0.0);
+    }
+  }
+  else {
+    arm.Set(0);
+  }
+
+  /*if (armHold()) {
+    arm.Set(0.3);
+  }
+  else if (armUp()) {
+    arm.Set(0.7);
+  }
+  else if (!armHold() && !armUp()) {
+    arm.Set(0.0);
+  }*/
 }
 // }
-
-//if (int frc::GenericHID::GetPOV(int pov = 0) const) {
-//  arm.Set(0.75);
-//}
-//else if (frc::GenericHID::GetPOV(int pov = 180) const) {
-//  arm.Set(-0.1);
-//}
-//else if (int frc::GenericHID::GetPOV(int pov = 270) const) {
-//  arm.Set(0.3);
-//}
-//else if (!int frc::GenericHID::GetPOV(int pov = 0) const && !int frc::GenericHID::GetPOV(int pov = 180) const && !int frc::GenericHID::GetPOV(int pov = 270) const) {
-//  arm.Set(0.0);
 
 
 /**
