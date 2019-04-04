@@ -63,8 +63,11 @@ frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side
 //TalonSRX arm = {14};
 frc::Encoder *armTilt = new frc::Encoder(0, 1, true, frc::Encoder::EncodingType::k4X); //declares quadrature encoder "armTilt" with ports 0 and 1 without inverted direction
 frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
-frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
+//frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 //armTilt->SetMinRate(1);
+frc::Solenoid Extend{0};
+frc::Solenoid Grab{1};
+double sensitivity = 1.0;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -131,11 +134,23 @@ void Robot::RobotPeriodic() {
   double targetOffsetAngle_Vertical = table->GetNumber("ty",0.0); //returns the offset of the target from the center of the camera in the y direction
   double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
   double targetSkew = table->GetNumber("ts",0.0); //Ditto
+  if (stick.GetPOV(0)) {
+    sensitivity += 0.01;
+  }
+  else if (stick.GetPOV(180)) {
+    sensitivity -= 0.01;
+  }
+  if (sensitivity > 1.0) {
+    sensitivity = 0;
+  }
+  else if (sensitivity < 0.1) {
+    sensitivity = 0.1;
+  }
   
   compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
   turn = -axis(4);  // left stick. use stick(4) if xbox 360
   speed = axis(1);  // right stick. use stick(5) if xbox 360
-  myRobot.ArcadeDrive(speed, turn);
+  myRobot.ArcadeDrive(speed*sensitivity, turn);
   if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
     pivot1.Set(-0.25); // out of -1.0 to 1.0
     pivot2.Set(-0.25);
@@ -161,13 +176,25 @@ void Robot::RobotPeriodic() {
     box.Set(0.0);
   }
   if (panelIntake()) {
-    panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+    //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
+    extend.Set(true);
+    Wait(0.1);
+    Wait(0.1);
+    Wait(0.1);
+    grab.Set(true);
   }
   else if (panelOuttake()) {
-    panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+    //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
+    grab.Set(false);
+    Wait(0.1);
+    Wait(0.1);
+    Wait(0.1);
+    extend.Set(false);
   }
   else if (!panelIntake() && !panelOuttake()) {
-    panelLift.Set(frc::DoubleSolenoid::Value::kOff);
+    //panelLift.Set(frc::DoubleSolenoid::Value::kOff);
+    grab.Set(false);
+    extend.Set(false);
   }
   /*if (armAlign()) {  // if armAlign is pressed
     if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
