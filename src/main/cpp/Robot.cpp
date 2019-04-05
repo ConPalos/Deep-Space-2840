@@ -17,7 +17,7 @@
 #include <frc/Joystick.h>
 #include <frc/SmartDashboard/SendableChooser.h>
 #include <frc/SmartDashboard/SmartDashboard.h>
-#include <frc/timer.h>
+#include <frc/Timer.h>
 #include <frc/Spark.h>
 #include <frc/Encoder.h>
 #include <frc/WPILib.h>
@@ -34,7 +34,7 @@
 // declaring the sticks and whatnot
 double speed, turn;
 
-double armscale = 1.0; //THIS IS THE SCALING FACTOR FOR THE ENCODER TO BE CALCULATED ON THURSDAY
+double armScale = 1.0; //THIS IS THE SCALING FACTOR FOR THE ENCODER TO BE CALCULATED ON THURSDAY
 /*
                      _____________                   __            
 |            |      |                  \        /   |  |          /\
@@ -57,7 +57,7 @@ INSTRUCTIONS:
 
 */
 
-frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box{2}, pivot2{6}, arm{7};  // declares the motors
+frc::Spark left{5}, left2{4}, right{0}, right2{1}, pivot1{3}, box1{2}, pivot2{6}, arm{7}, box2{8};  // declares the motors
 frc::RobotDrive myRobot{left2, left, right2, right};  // left controls left side, right controls right side
 //frc::Talon Talon{7};
 //TalonSRX arm = {14};
@@ -65,8 +65,8 @@ frc::Encoder *armTilt = new frc::Encoder(0, 1, true, frc::Encoder::EncodingType:
 frc::Compressor *compressor = new frc::Compressor(0); //declares compressor
 //frc::DoubleSolenoid panelLift{0, 1}; //declares panelLift as the pneumatic cylinder controlled by ports 1 and 2
 //armTilt->SetMinRate(1);
-frc::Solenoid Extend{0};
-frc::Solenoid Grab{1};
+frc::Solenoid extend{0};
+frc::Solenoid grab{1};
 double sensitivity = 1.0;
 
 void Robot::RobotInit() {
@@ -75,7 +75,7 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   //arm.Set(ControlMode::PercentOutput, 0);
   armTilt->Reset();
-  armTilt.setDistancePerPulse(armScale);
+  armTilt->SetDistancePerPulse(armScale);
 }
 
 /**
@@ -101,7 +101,7 @@ void Robot::RobotPeriodic() {
     ___| |___
    |_________|
   */
-  double lowerTilt = 1;
+  double lowerTilt = 1.0;
   /*  __________________
      |                  |
      |_______________   |
@@ -114,7 +114,7 @@ void Robot::RobotPeriodic() {
      |                  |
      |__________________|
   */
-  double middleTilt = 1;
+  double middleTilt = 1.0;
   /* ____________________
     |                    |
     |_________________   |
@@ -127,7 +127,7 @@ void Robot::RobotPeriodic() {
     |                    |
     |____________________|
   */
-  double upperTilt = 1;
+  double upperTilt = 1.0;
   //limelight stuff!!
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
   double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0); //returns the offset of the target from the center of the camera in the x direction
@@ -135,29 +135,29 @@ void Robot::RobotPeriodic() {
   double targetArea = table->GetNumber("ta",0.0); //I have no idea, but the webpage told me to put it here
   double targetSkew = table->GetNumber("ts",0.0); //Ditto
   if (stick.GetPOV(0)) {
-    sensitivity += 0.01;
+    sensitivity = sensitivity + 0.01;
   }
   else if (stick.GetPOV(180)) {
-    sensitivity -= 0.01;
+    sensitivity = sensitivity - 0.01;
   }
   if (sensitivity > 1.0) {
-    sensitivity = 0;
+    sensitivity = 1.0;
   }
   else if (sensitivity < 0.1) {
     sensitivity = 0.1;
   }
   
   compressor->SetClosedLoopControl(true); //turns on closed loop control, which makes the compressor turn on unless the pressure is about 120 PSI, in which case it turns off
-  turn = -axis(4);  // left stick. use stick(4) if xbox 360
-  speed = axis(1);  // right stick. use stick(5) if xbox 360
+  turn = -axis(4)*sensitivity;  // left stick. use stick(4) if xbox 360
+  speed = axis(1)*sensitivity;  // right stick. use stick(5) if xbox 360
   myRobot.ArcadeDrive(speed*sensitivity, turn);
   if (pivotUp()) {  // if intake button is pressed, move box with a speed of 0.3
-    pivot1.Set(-0.25); // out of -1.0 to 1.0
-    pivot2.Set(-0.25);
+    pivot1.Set(-0.4); // out of -1.0 to 1.0
+    pivot2.Set(-0.4);
   }
   else if (pivotDown()) {  // if shooter button is pressed, move box with a
-    pivot1.Set(0.5); // speed of -0.5 out of -1.0 to 1.0
-    pivot2.Set(0.5);
+    pivot1.Set(0.25); // speed of -0.5 out of -1.0 to 1.0
+    pivot2.Set(0.25);
   }
   else if (!pivotUp() && !pivotDown()) {  // if neither button is pressed, do diddly squat
     pivot1.Set(0.0);
@@ -166,35 +166,50 @@ void Robot::RobotPeriodic() {
   
   if (ballIntake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
-    box.Set(-0.8);
+    box1.Set(-0.6);
+    box2.Set(0.6);
   }
   else if (shooter()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
-    box.Set(0.8);
+    box1.Set(0.6);
+    box2.Set(-0.6);
   }
   else if (!ballIntake() && !shooter()) {
-    box.Set(0.0);
+    box1.Set(0.0);
+    box2.Set(0.0);
   }
   if (panelIntake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kReverse);
     extend.Set(true);
-    Wait(0.1);
-    Wait(0.1);
-    Wait(0.1);
+    frc::Wait(0.1);
+    frc::Wait(0.1);
+    frc::Wait(0.1);
     grab.Set(true);
   }
   else if (panelOuttake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kForward);
     grab.Set(false);
-    Wait(0.1);
-    Wait(0.1);
-    Wait(0.1);
+    frc::Wait(0.1);
+    frc::Wait(0.1);
+    frc::Wait(0.1);
     extend.Set(false);
   }
   else if (!panelIntake() && !panelOuttake()) {
     //panelLift.Set(frc::DoubleSolenoid::Value::kOff);
     grab.Set(false);
     extend.Set(false);
+  }
+  if (armUp()) {
+    arm.Set(0.6);
+  }
+  else if (armHold()) {
+    arm.Set(-0.3);
+  }
+  else if (stick.GetRawButton(8)) {
+    arm.Set(0.3);
+  }
+  else if (!armUp() && !armHold() && !stick.GetRawButton(8)) {
+    arm.Set(0.0);
   }
   /*if (armAlign()) {  // if armAlign is pressed
     if (abs(targetPosition()) < 0.05) { // if the object is less that 0.05 away
@@ -212,7 +227,7 @@ void Robot::RobotPeriodic() {
   moves it towards the object
     }
   }*/
-
+/*
   if(armReset()) {
     if(distance > 0) {
       arm.Set(-0.5);
@@ -222,7 +237,7 @@ void Robot::RobotPeriodic() {
     }
   }
   else if(armLower()) {
-    if(distace > lowerTilt) {
+    if(distance > lowerTilt) {
       arm.Set(-0.5);
     }
     if(distance < lowerTilt) {
@@ -256,7 +271,7 @@ void Robot::RobotPeriodic() {
   }
   else {
     arm.Set(0);
-  }
+  }*/
 
   /*if (armHold()) {
     arm.Set(0.3);

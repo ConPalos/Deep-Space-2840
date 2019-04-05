@@ -29,10 +29,11 @@ double axis(int axisNumber) {
   return stick.GetRawAxis(axisNumber);
 }
 bool pivotUp() {
-  return stick.GetRawButton(6);
+  //return stick.GetRawButton(6);
+  return axis(3) >= 0.2;
 }
 bool pivotDown() {
-  return axis(3) > 0.25;
+  return stick.GetRawButton(6);
 }
 bool ballIntake() {                  //intake the ball
   return stick.GetRawButton(1);  //left trigger
